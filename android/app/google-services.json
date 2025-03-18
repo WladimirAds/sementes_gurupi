@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "611363166289",
+    "project_id": "gurupi-semetes",
+    "storage_bucket": "gurupi-semetes.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611363166289:android:b9120c564079b21b634070",
+        "android_client_info": {
+          "package_name": "com.example.sementes_gurupi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV9ikMnWBgSqDuo5JZh1mY3pD44KBRBdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
