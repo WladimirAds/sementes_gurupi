@@ -96,13 +96,19 @@ class FirestoreService with ChangeNotifier {
   }
 
   Future<void> addTratamento(Tratamento tratamento) async {
-    await _firestore.collection('tratamentos').add({
+    try {
+    final docRef = await _firestore.collection('tratamentos').add({
       'lote': tratamento.lote,
       'maquina': tratamento.maquina,
       'produtos': tratamento.produtos,
       'corEtiqueta': tratamento.corEtiqueta,
       'status': tratamento.status,
     });
+    tratamento.id = docRef.id;
+    print('Tratamento adicionado com sucesso! ID: ${tratamento.id}');
+    }catch(e){
+      print('Erro ao adicionar Tratamento: $e');
+    }
   }
 
   Future<void> updateTratamento(Tratamento tratamento) async {
@@ -132,7 +138,13 @@ class FirestoreService with ChangeNotifier {
   }
 
   Future<void> deleteTratamento(String id) async {
-    await _firestore.collection('tratamentos').doc(id).delete();
+   try {
+     await _firestore.collection('tratamentos').doc(id).delete();
+     print('TRATAMENTO DELETADO COM SUCESSO!!!!');
+   }catch(e){
+
+     print('Erro ao deletar tratamento');
+   }
   }
 
   Stream<List<Tratamento>> getTratamentos() {
@@ -150,6 +162,7 @@ class FirestoreService with ChangeNotifier {
                 .toList();
 
         return Tratamento(
+          id: doc.id,
           lote: doc['lote'],
           maquina: doc['maquina'],
           produtos: produtos,

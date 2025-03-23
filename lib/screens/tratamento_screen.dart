@@ -19,7 +19,8 @@ class _TratamentoScreenState extends State<TratamentoScreen> {
   final List<Map<String, String>> _produtos = [];
 
   void _adicionarProduto() {
-    if (_produtoController.text.isNotEmpty && _dosagemController.text.isNotEmpty) {
+    if (_produtoController.text.isNotEmpty &&
+        _dosagemController.text.isNotEmpty) {
       setState(() {
         _produtos.add({
           'nome': _produtoController.text,
@@ -85,12 +86,13 @@ class _TratamentoScreenState extends State<TratamentoScreen> {
                   tratamento: tratamento,
                   firestoreService: firestoreService,
                   pdfService: pdfService,
-                  onEdit: () => _showEditTratamentoDialog(
-                    context,
-                    firestoreService,
-                    pdfService,
-                    tratamento,
-                  ),
+                  onEdit:
+                      () => _showEditTratamentoDialog(
+                        context,
+                        firestoreService,
+                        pdfService,
+                        tratamento,
+                      ),
                 );
               },
             );
@@ -101,10 +103,10 @@ class _TratamentoScreenState extends State<TratamentoScreen> {
   }
 
   void _showAddTratamentoDialog(
-      BuildContext context,
-      FirestoreService firestoreService,
-      PdfService pdfService,
-      ) {
+    BuildContext context,
+    FirestoreService firestoreService,
+    PdfService pdfService,
+  ) {
     _showTratamentoDialog(
       context: context,
       firestoreService: firestoreService,
@@ -114,11 +116,11 @@ class _TratamentoScreenState extends State<TratamentoScreen> {
   }
 
   void _showEditTratamentoDialog(
-      BuildContext context,
-      FirestoreService firestoreService,
-      PdfService pdfService,
-      Tratamento tratamento,
-      ) {
+    BuildContext context,
+    FirestoreService firestoreService,
+    PdfService pdfService,
+    Tratamento tratamento,
+  ) {
     _loteController.text = tratamento.lote;
     _maquinaController.text = tratamento.maquina;
     _corEtiquetaController.text = tratamento.corEtiqueta;
@@ -171,22 +173,26 @@ class _TratamentoScreenState extends State<TratamentoScreen> {
                           },
                         ),
                         DropdownButtonFormField<String>(
-                          items: ['BASF', 'BAYER', 'CORTEVA', 'SYNGENTA'].map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
+                          items:
+                              ['BASF', 'BAYER', 'CORTEVA', 'SYNGENTA'].map((
+                                String value,
+                              ) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
                           onChanged: (value) {
                             setState(() {
                               _maquinaController.text = value!;
-                              _corEtiquetaController.text = value == 'BASF'
-                                  ? 'VERDE'
-                                  : value == 'BAYER'
-                                  ? 'AZUL'
-                                  : value == 'CORTEVA'
-                                  ? 'ROXA'
-                                  : 'VERMELHA';
+                              _corEtiquetaController.text =
+                                  value == 'BASF'
+                                      ? 'VERDE'
+                                      : value == 'BAYER'
+                                      ? 'AZUL'
+                                      : value == 'CORTEVA'
+                                      ? 'ROXA'
+                                      : 'VERMELHA';
                             });
                           },
                           decoration: InputDecoration(labelText: 'Máquina'),
@@ -226,18 +232,23 @@ class _TratamentoScreenState extends State<TratamentoScreen> {
                         _produtos.isEmpty
                             ? Text('Nenhum produto adicionado')
                             : Column(
-                          children: _produtos.map((produto) {
-                            return ListTile(
-                              title: Text('${produto['nome']} (Dosagem: ${produto['dosagem']})'),
-                              trailing: IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () {
-                                  _removerProduto(_produtos.indexOf(produto));
-                                },
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                              children:
+                                  _produtos.map((produto) {
+                                    return ListTile(
+                                      title: Text(
+                                        '${produto['nome']} (Dosagem: ${produto['dosagem']})',
+                                      ),
+                                      trailing: IconButton(
+                                        icon: Icon(Icons.delete),
+                                        onPressed: () {
+                                          _removerProduto(
+                                            _produtos.indexOf(produto),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  }).toList(),
+                            ),
                       ],
                     ),
                   ),
@@ -259,7 +270,11 @@ class _TratamentoScreenState extends State<TratamentoScreen> {
                             if (_formKey.currentState!.validate()) {
                               if (_produtos.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Adicione pelo menos um produto!')),
+                                  SnackBar(
+                                    content: Text(
+                                      'Adicione pelo menos um produto!',
+                                    ),
+                                  ),
                                 );
                                 return;
                               }
@@ -270,19 +285,31 @@ class _TratamentoScreenState extends State<TratamentoScreen> {
                                 maquina: _maquinaController.text,
                                 produtos: _produtos,
                                 corEtiqueta: _corEtiquetaController.text,
-                                status: isEditing ? tratamento?.status ?? 'Pendente' : 'Pendente',
+                                status:
+                                    isEditing
+                                        ? tratamento?.status ?? 'Pendente'
+                                        : 'Pendente',
                               );
 
                               if (isEditing) {
-                                await firestoreService.updateTratamento(novoTratamento);
+                                await firestoreService.updateTratamento(
+                                  novoTratamento,
+                                );
                               } else {
-                                await firestoreService.addTratamento(novoTratamento);
+                                await firestoreService.addTratamento(
+                                  novoTratamento,
+                                );
                               }
 
-                              final pdf = await pdfService.generateTratamentoPdf(novoTratamento);
+                              final pdf = await pdfService
+                                  .generateTratamentoPdf(novoTratamento);
 
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Tratamento ${isEditing ? 'atualizado' : 'salvo'} e PDF gerado!')),
+                                SnackBar(
+                                  content: Text(
+                                    'Tratamento ${isEditing ? 'atualizado' : 'salvo'} e PDF gerado!',
+                                  ),
+                                ),
                               );
 
                               _limparCampos();
@@ -349,9 +376,8 @@ class _AnimatedCardState extends State<AnimatedCard> {
                     IconButton(
                       icon: Icon(Icons.picture_as_pdf, color: Colors.white),
                       onPressed: () async {
-                        final pdf = await widget.pdfService.generateTratamentoPdf(
-                          widget.tratamento,
-                        );
+                        final pdf = await widget.pdfService
+                            .generateTratamentoPdf(widget.tratamento);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -367,14 +393,22 @@ class _AnimatedCardState extends State<AnimatedCard> {
                     IconButton(
                       icon: Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
-                        await widget.firestoreService.deleteTratamento(
-                          widget.tratamento.id!,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Tratamento deletado com sucesso!'),
-                          ),
-                        );
+                        if (widget.tratamento.id != null) {
+                          await widget.firestoreService.deleteTratamento(
+                            widget.tratamento.id!,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Tratamento deletado com sucesso!'),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Erro: ID do tratamento não encontrado!'),
+                            ),
+                          );
+                        }
                       },
                     ),
                   ],
@@ -397,7 +431,9 @@ class _AnimatedCardState extends State<AnimatedCard> {
                       SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () async {
-                          String novoStatus = _proximoStatus(widget.tratamento.status);
+                          String novoStatus = _proximoStatus(
+                            widget.tratamento.status,
+                          );
                           await widget.firestoreService.updateTratamento(
                             Tratamento(
                               id: widget.tratamento.id,
@@ -424,9 +460,7 @@ class _AnimatedCardState extends State<AnimatedCard> {
                       ),
                       ...widget.tratamento.produtos.map((produto) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4.0,
-                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
                           child: Text(
                             '- ${produto['nome']} (Dosagem: ${produto['dosagem']})',
                           ),
@@ -460,11 +494,8 @@ class AnimatedButton extends StatefulWidget {
   final VoidCallback onPressed;
   final Widget child;
 
-  const AnimatedButton({
-    Key? key,
-    required this.onPressed,
-    required this.child,
-  }) : super(key: key);
+  const AnimatedButton({Key? key, required this.onPressed, required this.child})
+    : super(key: key);
 
   @override
   _AnimatedButtonState createState() => _AnimatedButtonState();
@@ -482,9 +513,10 @@ class _AnimatedButtonState extends State<AnimatedButton>
       vsync: this,
       duration: Duration(milliseconds: 100),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -510,15 +542,9 @@ class _AnimatedButtonState extends State<AnimatedButton>
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: child,
-          );
+          return Transform.scale(scale: _scaleAnimation.value, child: child);
         },
-        child: ElevatedButton(
-          onPressed: widget.onPressed,
-          child: widget.child,
-        ),
+        child: ElevatedButton(onPressed: widget.onPressed, child: widget.child),
       ),
     );
   }
