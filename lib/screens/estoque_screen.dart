@@ -197,6 +197,7 @@ class EstoqueScreen extends StatelessWidget {
   ) {
     final TextEditingController _loteController = TextEditingController();
     final TextEditingController _camaraFriaController = TextEditingController();
+    final TextEditingController _produtorController = TextEditingController();
 
     showDialog(
       context: context,
@@ -215,6 +216,10 @@ class EstoqueScreen extends StatelessWidget {
                   controller: _camaraFriaController,
                   decoration: InputDecoration(labelText: 'Câmara Fria'),
                 ),
+                TextField(
+                  controller: _produtorController,
+                  decoration: InputDecoration(labelText: 'Produtor'),
+                ),
               ],
             ),
           ),
@@ -231,6 +236,7 @@ class EstoqueScreen extends StatelessWidget {
                   id: '', // O Firestore gera o ID automaticamente
                   lote: _loteController.text,
                   camaraFria: _camaraFriaController.text,
+                  produtor: _produtorController.text,
                   tratado: false, // Valor padrão
                 );
 
@@ -259,6 +265,9 @@ class EstoqueScreen extends StatelessWidget {
     );
     final TextEditingController _camaraFriaController = TextEditingController(
       text: estoque.camaraFria,
+    );
+    final TextEditingController _produtorController = TextEditingController(
+      text: estoque.produtor,
     );
 
     showDialog(
@@ -294,6 +303,7 @@ class EstoqueScreen extends StatelessWidget {
                   id: estoque.id,
                   lote: _loteController.text,
                   camaraFria: _camaraFriaController.text,
+                  produtor: _produtorController.text,
                   tratado: estoque.tratado, // Mantém o valor atual
                 );
 

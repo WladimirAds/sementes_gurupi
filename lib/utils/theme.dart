@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 
 final ThemeData temaPadrao = ThemeData(
-  primarySwatch: Colors.teal, // Tons de verde/azul acinzentado
+  primarySwatch: Colors.lightGreen, // Tons de verde/azul acinzentado
   brightness: Brightness.light,
-  scaffoldBackgroundColor: Colors.grey[200],
+  scaffoldBackgroundColor: Colors.teal[200],
   appBarTheme: AppBarTheme(
-    color: Colors.teal[700],
+    color: Colors.teal,
   ),
 );
 
 final ThemeData temaClaro = ThemeData(
   primarySwatch: Colors.blue,
   brightness: Brightness.light,
-  scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: Colors.blueGrey[200],
   appBarTheme: AppBarTheme(
-    color: Colors.blue,
+    color: Colors.blue[800],
   ),
 );
 
 final ThemeData temaEscuro = ThemeData(
   primarySwatch: Colors.indigo,
   brightness: Brightness.dark,
-  scaffoldBackgroundColor: Colors.grey[900],
+  scaffoldBackgroundColor: Colors.blueGrey[400],
   appBarTheme: AppBarTheme(
     color: Colors.indigo[700],
   ),

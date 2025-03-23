@@ -27,15 +27,22 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
   Future<void> _carregarDadosUsuario() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      print('Usuário logado: ${user.uid}');
       final firestoreService = Provider.of<FirestoreService>(
         context,
         listen: false,
       );
+      final nomeUsuario = await firestoreService.getNomeUsuario(user.uid);
+      print('Nome do usuário: $nomeUsuario');
+
       final isAdmin = await firestoreService.isAdmin(user.uid);
+      print('É admin: $isAdmin');
       setState(() {
-        _nomeUsuario = user.displayName ?? 'Usuário';
+        _nomeUsuario = nomeUsuario;
         _isAdmin = isAdmin;
       });
+    }else{
+      print('Nenhum usuário logado');
     }
   }
 
@@ -50,6 +57,12 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
     }
   }
 
+  Future<void> _removerFoto() async {
+    setState(() {
+      _fotoPerfil = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -59,19 +72,26 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
-          Center(
-            child: GestureDetector(
-              onTap: _escolherFoto,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage:
-                    _fotoPerfil != null ? FileImage(_fotoPerfil!) : null,
-                child:
-                    _fotoPerfil == null
-                        ? Icon(Icons.camera_alt, size: 40)
-                        : null,
+          Column(
+            children: [
+              GestureDetector(
+                onTap: _escolherFoto,
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage:
+                      _fotoPerfil != null ? FileImage(_fotoPerfil!) : null,
+                  child:
+                      _fotoPerfil == null
+                          ? Icon(Icons.camera_alt, size: 40)
+                          : null,
+                ),
               ),
-            ),
+              if (_fotoPerfil != null)
+                TextButton(
+                  onPressed: _removerFoto,
+                  child: Text('Remover Foto'),
+                ),
+            ],
           ),
           Text('Usuário: $_nomeUsuario', style: TextStyle(fontSize: 18)),
           SizedBox(height: 20),

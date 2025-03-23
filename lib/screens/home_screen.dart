@@ -13,10 +13,18 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text(
+          'Home',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: Icon(Icons.logout, color: Colors.white),
             onPressed: () async {
               await authService.signOut();
               Navigator.pushReplacementNamed(context, '/login');
@@ -37,6 +45,7 @@ class HomeScreen extends StatelessWidget {
               context,
               icon: Icons.inventory,
               label: 'Estoque',
+
               onTap: () {
                 Navigator.push(
                   context,
@@ -93,6 +102,10 @@ class HomeScreen extends StatelessWidget {
     required String label,
     required VoidCallback onTap,
   }) {
+    // Verifica se o tema é escuro
+    final bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    // Define a cor dos ícones com base no tema
+    final Color iconColor = isDarkTheme ? Colors.white : Colors.black;
     return Card(
       elevation: 4,
       child: InkWell(
@@ -101,7 +114,11 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 50, color: Theme.of(context).primaryColor),
+            Icon(
+              icon,
+              size: 50,
+              color: isDarkTheme ? iconColor : Theme.of(context).primaryColor,
+            ),
             SizedBox(height: 10),
             Text(
               label,

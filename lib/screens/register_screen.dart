@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
+import '../services/firestore_service.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -9,7 +12,49 @@ class RegisterScreen extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
 
-  @override
+  Future<void> _cadastrarUsuario(BuildContext context) async {
+    final email = _emailController.text.trim();
+    final senha = _passwordController.text.trim();
+    final nome = _nameController.text.trim();
+
+    if (email.isEmpty || senha.isEmpty || nome.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Preencha todos os campos!')),
+      );
+      return;
+    }
+
+    try {
+      // Cria o usuário no Firebase Auth
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: senha,
+      );
+
+      // Obtém o usuário criado
+      final user = userCredential.user;
+      if (user != null) {
+        // Adiciona os dados do usuário na coleção "usuarios" no Firestore
+        await FirebaseFirestore.instance.collection('usuarios').doc(user.uid).set({
+          'nome': nome,
+          'email': email,
+          'isAdmin': false, // Define como false por padrão
+        });
+
+        print('Usuário cadastrado com sucesso! ID: ${user.uid}');
+
+        // Navega para a tela de configurações
+        Navigator.of(context).pushReplacementNamed('/configuracoes');
+      }
+    } catch (e) {
+      print('Erro ao cadastrar usuário: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao cadastrar: $e')),
+      );
+    }
+  }
+
+   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
 

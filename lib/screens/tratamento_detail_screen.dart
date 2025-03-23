@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sementes_gurupi/models/estoque_model.dart';
 import '../models/tratamento_model.dart';
 
 class TratamentoDetailScreen extends StatelessWidget {
   final Tratamento tratamento;
+  final Estoque estoque;
 
-  TratamentoDetailScreen({required this.tratamento});
+  TratamentoDetailScreen({required this.tratamento, required this.estoque});
 
   @override
   Widget build(BuildContext context) {
